@@ -1,0 +1,6 @@
+{
+    "name": "kafkareader",
+    "class": "com.alibaba.datax.plugin.reader.kafkareader.KafkaReader",
+    "description": "",
+    "developer": "alibaba"
+}

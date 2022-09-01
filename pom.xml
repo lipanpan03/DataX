@@ -77,6 +77,8 @@
         <module>tsdbreader</module>
         <module>opentsdbreader</module>
 
+        <module>kafkareader</module>
+
 
         <!-- writer -->
         <module>mysqlwriter</module>
@@ -115,6 +117,8 @@
         <module>oscarwriter</module>
         <module>cassandrawriter</module>
         <module>clickhousewriter</module>
+
+        <module>tugraphwriter</module>
 
         <!-- common support module -->
         <module>plugin-rdbms-util</module>

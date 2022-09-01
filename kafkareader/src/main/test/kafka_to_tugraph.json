@@ -1,0 +1,58 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel":1
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "kafkareader",
+          "parameter": {
+            "server": "localhost:9092",
+            "topic": "test-topic1",
+            "column": [
+              "id",
+              "duration",
+              "title",
+              "tagline",
+              "summary",
+              "poster_image",
+              "rated"
+            ],
+            "kafkaConfig":{
+              "group.id": "group1"
+            }
+          }
+        },
+        "writer": {
+          "name": "tugraphwriter",
+          "parameter": {
+            "host": "127.0.0.1",
+            "port": 7071,
+            "username": "admin",
+            "password": "73@TuGraph",
+            "graphName": "default",
+            "batchNum": 1,
+            "files" : [
+              {
+                "label" : "movie",
+                "format" : "JSON",
+                "columns" : [
+                  "id",
+                  "duration",
+                  "title",
+                  "tagline",
+                  "summary",
+                  "poster_image",
+                  "rated"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

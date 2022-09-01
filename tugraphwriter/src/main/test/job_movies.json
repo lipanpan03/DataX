@@ -1,0 +1,69 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel":1
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "txtfilereader",
+          "parameter": {
+            "path": ["movies.csv"],
+            "encoding": "UTF-8",
+            "column" : [
+              {
+                "index": 0,
+                "type": "string"
+              },
+              {
+                "index": 1,
+                "type": "string"
+              },
+              {
+                "index": 2,
+                "type": "string"
+              },
+              {
+                "index": 3,
+                "type": "string"
+              }
+            ],
+            "fieldDelimiter": ","
+          }
+        },
+        "writer": {
+          "name": "tugraphwriter",
+          "parameter": {
+            "host":"127.0.0.1",
+            "port": 7071,
+            "username": "admin",
+            "password": "73@TuGraph",
+            "graphName": "default",
+            "schema" : [
+              {
+                "label" : "movie",
+                "type" : "VERTEX",
+                "properties" : [
+                  {"name" : "mid", "type":"STRING"},
+                  {"name" : "name", "type":"STRING"},
+                  {"name" : "year", "type":"STRING"},
+                  {"name":"rate", "type":"FLOAT", "optional":true}
+                ],
+                "primary" : "mid"
+              }
+            ],
+            "files" : [
+              {
+                "label" : "movie",
+                "format" : "JSON",
+                "columns" : ["mid","name","year","rate"]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+    "name": "kafkareader",
+    "parameter": {
+        "server": "localhost:9092",
+        "topic": "tugraph-topic",
+        "column": [
+            "__key__",
+            "__value__",
+            "__partition__",
+            "__offset__",
+            "__timestamp__",
+            "mid",
+            "name",
+            "year",
+            "rate"
+        ],
+        "kafkaConfig":{
+            "group.id": "group_1"
+        }
+    }
+}
+
+

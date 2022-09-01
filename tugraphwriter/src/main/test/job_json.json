@@ -1,0 +1,45 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                "channel":1
+            },
+            "errorLimit": {
+                "record": 0,
+                "percentage": 0.02
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "txtfilereader",
+                    "parameter": {
+                        "path": ["/Users/zhywang/work/java/DataX/tugraphwriter/src/main/resources/test/actors.csv"],
+                        "encoding": "UTF-8",
+                        "column" : [
+                            {
+                                "index": 0,
+                                "type": "string"
+                            },
+                            {
+                                "index": 1,
+                                "type": "string"
+                            }
+                        ],
+                        "fieldDelimiter": ","
+                    }
+                },
+                "writer": {
+                  "name": "txtfilewriter",
+                  "parameter": {
+                    "path": "/Users/zhywang/work/java/DataX/result",
+                    "fileName": "test",
+                    "fileFormat": "json",
+                    "writeMode": "truncate",
+                    "dateFormat": "yyyy-MM-dd"
+                  }
+              }
+            }
+        ]
+    }
+}

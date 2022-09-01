@@ -1,0 +1,42 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                "channel":10
+            },
+            "errorLimit": {
+                "record": 0,
+                "percentage": 0.02
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "username": "root",
+                        "password": "root",
+                        "connection": [
+                          {
+                            "querySql": [
+                              "select id, name, age, create_time, update_time from test.t_user where id < 100;"
+                            ],
+                            "jdbcUrl": [
+                              "jdbc:mysql://172.20.172.111:3306/test?useSSL=false"
+                            ]
+                          }
+                        ]
+                    }
+                },
+                "writer": {
+                  "name": "txtfilewriter",
+                    "parameter": {
+                      "path": "/home/zhywang/work/java/DataX/data",
+                      "fileName": "t_user",
+                      "writeMode": "truncate"
+                    }
+                }
+            }
+        ]
+    }
+}

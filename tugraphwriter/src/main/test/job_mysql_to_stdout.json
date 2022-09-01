@@ -1,0 +1,38 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                 "channel":1
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "username": "root",
+                        "password": "root",
+                        "connection": [
+                            {
+                                "querySql": [
+                                    "select mid, name, year, rate from test.movies;"
+                                ],
+                                "jdbcUrl": [
+                                    "jdbc:mysql://127.0.0.1:43306/test?useSSL=false"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "writer": {
+                    "name": "streamwriter",
+                    "parameter": {
+                        "print": true,
+                        "encoding": "UTF-8"
+                    }
+                }
+            }
+        ]
+    }
+}
+
