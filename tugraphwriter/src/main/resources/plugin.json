@@ -1,0 +1,10 @@
+{
+    "name": "tugraphwriter",
+    "class": "com.alibaba.datax.plugin.writer.tugraphwriter.TuGraphWriter",
+    "description": {
+        "useScene": "write data to tugraph",
+        "mechanism": "call tugraph the http interface '/import/text' to write data in batches",
+        "warn": ""
+    },
+    "developer": "alibaba"
+}

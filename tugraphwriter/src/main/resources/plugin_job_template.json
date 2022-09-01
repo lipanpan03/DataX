@@ -1,0 +1,30 @@
+{
+    "name": "tugraphwriter",
+    "parameter": {
+        "host":"127.0.0.1",
+        "port": 7071,
+        "username": "admin",
+        "password": "73@TuGraph",
+        "graphName": "default",
+        "schema" : [
+            {
+                "label" : "movie",
+                "type" : "VERTEX",
+                "properties" : [
+                    {"name" : "mid", "type":"STRING"},
+                    {"name" : "name", "type":"STRING"},
+                    {"name" : "year", "type":"STRING"},
+                    {"name":"rate", "type":"FLOAT", "optional":true}
+                ],
+                "primary" : "mid"
+            }
+        ],
+        "files" : [
+            {
+                "format" : "JSON",
+                "label" : "movie",
+                "columns" : ["mid","name","year","rate"]
+            }
+        ]
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                "channel":1
+            },
+            "errorLimit": {
+                "record": 0,
+                "percentage": 0.02
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "username": "root",
+                        "password": "root",
+                        "column": [
+                          "id",
+                          "name",
+                          "age",
+                          "create_time",
+                          "update_time"
+                        ],
+                        "splitPk": "id",
+                        "connection": [
+                          {
+                            "table": [
+                              "t_user"
+                            ],
+                            "jdbcUrl": [
+                              "jdbc:mysql://172.20.172.111:3306/test?useSSL=false"
+                            ]
+                          }
+                        ]
+                    }
+                },
+                "writer": {
+                  "name": "txtfilewriter",
+                    "parameter": {
+                      "path": "/home/zhywang/work/java/DataX/data",
+                      "fileName": "t_user",
+                      "writeMode": "truncate"
+                    }
+                }
+            }
+        ]
+    }
+}

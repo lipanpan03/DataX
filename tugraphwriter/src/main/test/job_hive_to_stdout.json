@@ -1,0 +1,48 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                "channel": 1
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "hdfsreader",
+                    "parameter": {
+                        "path": "/user/hive/warehouse/movies/*",
+                        "defaultFS": "hdfs://127.0.0.1:9000",
+                        "column": [
+                               {
+                                "index": 0,
+                                "type": "string"
+                               },
+                               {
+                                "index": 1,
+                                "type": "string"
+                               },
+                               {
+                                "index": 2,
+                                "type": "string"
+                               },
+                               {
+                                   "index":3,
+                                   "type":"string"
+                               }
+                        ],
+                        "fileType": "text",
+                        "encoding": "UTF-8",
+                        "fieldDelimiter": ","
+                    }
+
+                },
+                "writer": {
+                    "name": "streamwriter",
+                    "parameter": {
+                        "print": true
+                    }
+                }
+            }
+        ]
+    }
+}

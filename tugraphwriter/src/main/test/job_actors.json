@@ -1,0 +1,60 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel":5
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "txtfilereader",
+          "parameter": {
+            "path": ["/home/zhywang/work/java/DataX/tugraphwriter/src/main/test/data/*"],
+            "encoding": "UTF-8",
+            "column" : [
+              {
+                "index": 0,
+                "type": "string"
+              },
+              {
+                "index": 1,
+                "type": "string"
+              }
+            ],
+            "fieldDelimiter": ","
+          }
+        },
+        "writer": {
+          "name": "tugraphwriter",
+          "parameter": {
+            "host": "127.0.0.1",
+            "port": 7071,
+            "username": "admin",
+            "password": "73@TuGraph",
+            "graphName": "default",
+            "ignoreErrors": false,
+            "schema" : [
+              {
+                "label" : "actor",
+                "type" : "VERTEX",
+                "properties" : [
+                  { "name" : "aid", "type":"STRING"},
+                  { "name" : "name", "type":"STRING"}
+                ],
+                "primary" : "aid"
+              }
+            ],
+            "files" : [
+              {
+                "label" : "actor",
+                "format" : "JSON",
+                "columns" : ["aid","name"]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

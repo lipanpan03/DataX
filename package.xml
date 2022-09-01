@@ -237,6 +237,13 @@
             <outputDirectory>datax</outputDirectory>
         </fileSet>
 
+        <fileSet>
+            <directory>kafkareader/target/datax/</directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <outputDirectory>datax</outputDirectory>
+        </fileSet>
         <!-- writer -->
         <fileSet>
             <directory>mysqlwriter/target/datax/</directory>
@@ -506,6 +513,13 @@
         </fileSet>
         <fileSet>
             <directory>neo4jwriter/target/datax/</directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <outputDirectory>datax</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>tugraphwriter/target/datax/</directory>
             <includes>
                 <include>**/*.*</include>
             </includes>
