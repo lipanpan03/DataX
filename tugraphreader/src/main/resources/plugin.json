@@ -1,0 +1,10 @@
+{
+    "name": "tugraphreader",
+    "class": "com.alibaba.datax.plugin.reader.tugraphreader.TuGraphReader",
+    "description": {
+        "useScene": "read data from tugraph-db.",
+        "mechanism": "use datax framework to read data from tugraph-db.",
+        "warn": ""
+    },
+    "developer": "alibaba"
+}

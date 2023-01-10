@@ -78,6 +78,7 @@
         <module>opentsdbreader</module>
 
         <module>kafkareader</module>
+        <module>tugraphreader</module>
 
 
         <!-- writer -->
