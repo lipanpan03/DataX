@@ -318,6 +318,15 @@ public class Configuration {
 		}
 	}
 
+public Integer getNecessaryInt(final String path, ErrorCode errorCode) {
+	Integer ret = getInt(path);
+	if (null == ret) {
+	   throw DataXException.asDataXException(errorCode,
+			   String.format("您提供配置文件有误，[%s]是必填参数，不允许为空或者留白 .", path));
+	}
+	return ret;
+}
+
 	/**
 	 * 根据用户提供的json path，寻址Integer对象，如果对象不存在，返回默认Integer对象
 	 * 
