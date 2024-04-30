@@ -191,7 +191,7 @@ public class TuGraphWriter extends Writer {
             }
             Gson gson = new Gson();
             JsonArray jsonArray = gson.fromJson(ret, JsonArray.class);
-            String result = gson.toJson(jsonArray.get(0).getAsJsonArray());
+            String result = gson.toJson(jsonArray.get(0).getAsJsonObject());
             LOG.info(result);
         }
 
