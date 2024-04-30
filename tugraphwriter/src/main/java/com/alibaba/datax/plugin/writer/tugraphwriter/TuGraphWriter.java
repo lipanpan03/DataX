@@ -73,6 +73,10 @@ public class TuGraphWriter extends Writer {
         private String password;
         private String graphname;
         private String labelName;
+        private Map<String,String> startLabel = new HashMap<>();
+        private Map<String,String> endLabel = new HashMap<>();
+        private String startLabelJson;
+        private String endLabelJson;
         private String labelType;
         private int batchNum;
         private List<Property> properties = new ArrayList<>();
@@ -88,12 +92,20 @@ public class TuGraphWriter extends Writer {
             graphname = config.getString(Key.GRAPH_NAME);
             labelType = config.getString(Key.LABEL_TYPE);
             labelName = config.getString(Key.LABEL_NAME);
+            if (labelType.equals("EDGE")) {
+                Gson gson = new Gson();
+                startLabel = config.getMap(Key.START_LABEL, String.class);
+                endLabel = config.getMap(Key.END_LABEL, String.class);
+                startLabelJson = gson.toJson(startLabel);
+                endLabelJson = gson.toJson(endLabel);
+            }
             urls = config.getList(Key.URLS, String.class);
             batchNum = config.getInt(Key.BATCH_NUM, 1000);
             if (batchNum <= 0) {
                 throw new DataXException(TuGraphWriterErrorCode.PARAMETER_ERROR, "batchNum error");
             }
             String schema;
+            String startSchema = null, endSchema = null;
             try {
                 if (urls.size() == 1) {
                     client = new TuGraphDbRpcClient(urls.get(0), "admin", "73@TuGraph");
@@ -106,21 +118,44 @@ public class TuGraphWriter extends Writer {
                     schema = client.callCypherToLeader(String.format("CALL db.getVertexSchema('%s')", labelName), graphname, 10000);
                 } else {
                     schema = client.callCypherToLeader(String.format("CALL db.getEdgeSchema('%s')", labelName), graphname, 10000);
+                    startSchema = client.callCypherToLeader(String.format("CALL db.getVertexSchema('%s')", startLabel.get("type")), graphname, 10000);
+                    endSchema = client.callCypherToLeader(String.format("CALL db.getVertexSchema('%s')", endLabel.get("type")), graphname, 10000);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            Gson gson = new Gson();
-            JsonArray jsonArray = gson.fromJson(schema, JsonArray.class);
-            JsonObject jsonObject = jsonArray.get(0).getAsJsonObject().get("schema").getAsJsonObject();
-            JsonArray array = jsonObject.get("properties").getAsJsonArray();
             Map<String, String> allProperties = new HashMap<>();
-            for (JsonElement element : array) {
-                JsonObject obj = element.getAsJsonObject();
-                String name = obj.get("name").getAsString();
-                String type = obj.get("type").getAsString();
-                allProperties.put(name, type);
+            {
+                Gson gson = new Gson();
+                JsonArray jsonArray = gson.fromJson(schema, JsonArray.class);
+                JsonObject jsonObject = jsonArray.get(0).getAsJsonObject().get("schema").getAsJsonObject();
+                JsonArray array = jsonObject.get("properties").getAsJsonArray();
+                for (JsonElement element : array) {
+                    JsonObject obj = element.getAsJsonObject();
+                    String name = obj.get("name").getAsString();
+                    String type = obj.get("type").getAsString();
+                    allProperties.put(name, type);
+                }
             }
+            if (labelType.equals("EDGE")) {
+                for (String s : new String[]{startSchema,endSchema}) {
+                    Gson gson = new Gson();
+                    JsonArray jsonArray = gson.fromJson(s, JsonArray.class);
+                    JsonObject jsonObject = jsonArray.get(0).getAsJsonObject().get("schema").getAsJsonObject();
+                    String primary = jsonObject.get("primary").getAsString();
+                    JsonArray properties = jsonObject.get("properties").getAsJsonArray();
+                    for (JsonElement element : properties) {
+                        JsonObject obj = element.getAsJsonObject();
+                        String name = obj.get("name").getAsString();
+                        String type = obj.get("type").getAsString();
+                        if (name.equals(primary)) {
+                            allProperties.put(name, type);
+                            break;
+                        }
+                    }
+                }
+            }
+
             for (String name : config.getList(Key.PROPERTIES, String.class)) {
                 Property item = new Property();
                 item.setName(name);
@@ -137,9 +172,10 @@ public class TuGraphWriter extends Writer {
         private void writeTugraph(JsonArray array) throws Exception {
             String str = array.toString().replace("'", "''");
             if (labelType.equals("VERTEX")) {
-                client.callCypherToLeader(String.format("CALL upsertVertexByJson('%s','%s')", labelName, str), graphname, 10000);
+                client.callCypherToLeader(String.format("CALL db.upsertVertexByJson('%s','%s')", labelName, str), graphname, 10000);
             } else {
-                client.callCypherToLeader(String.format("CALL upsertEdgeByJson('%s','%s')", labelName, str), graphname, 10000);
+                client.callCypherToLeader(String.format("CALL db.upsertEdgeByJson('%s','%s','%s','%s')",
+                        labelName, startLabelJson, endLabelJson, str), graphname, 10000);
             }
         }
 
