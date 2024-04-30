@@ -95,7 +95,13 @@ public class TuGraphWriter extends Writer {
             if (labelType.equals("EDGE")) {
                 Gson gson = new Gson();
                 startLabel = config.getMap(Key.START_LABEL, String.class);
+                if (startLabel.get("type") == null || startLabel.get("key") == null) {
+                    throw new DataXException(TuGraphWriterErrorCode.PARAMETER_ERROR, "startLabel missing 'type' or 'key'");
+                }
                 endLabel = config.getMap(Key.END_LABEL, String.class);
+                if (endLabel.get("type") == null || endLabel.get("key") == null) {
+                    throw new DataXException(TuGraphWriterErrorCode.PARAMETER_ERROR, "endLabel missing 'type' or 'key'");
+                }
                 startLabelJson = gson.toJson(startLabel);
                 endLabelJson = gson.toJson(endLabel);
             }
@@ -138,9 +144,10 @@ public class TuGraphWriter extends Writer {
                 }
             }
             if (labelType.equals("EDGE")) {
-                for (String s : new String[]{startSchema,endSchema}) {
+                String[] vertexSchemas = new String[]{startSchema,endSchema};
+                for (int i = 0; i < vertexSchemas.length; i++) {
                     Gson gson = new Gson();
-                    JsonArray jsonArray = gson.fromJson(s, JsonArray.class);
+                    JsonArray jsonArray = gson.fromJson(vertexSchemas[i], JsonArray.class);
                     JsonObject jsonObject = jsonArray.get(0).getAsJsonObject().get("schema").getAsJsonObject();
                     String primary = jsonObject.get("primary").getAsString();
                     JsonArray properties = jsonObject.get("properties").getAsJsonArray();
@@ -149,7 +156,11 @@ public class TuGraphWriter extends Writer {
                         String name = obj.get("name").getAsString();
                         String type = obj.get("type").getAsString();
                         if (name.equals(primary)) {
-                            allProperties.put(name, type);
+                            if (i == 0) {
+                                allProperties.put(startLabel.get("key"), type);
+                            } else {
+                                allProperties.put(endLabel.get("key"), type);
+                            }
                             break;
                         }
                     }
