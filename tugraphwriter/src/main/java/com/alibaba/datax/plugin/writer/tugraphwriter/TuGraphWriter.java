@@ -182,12 +182,17 @@ public class TuGraphWriter extends Writer {
 
         private void writeTugraph(JsonArray array) throws Exception {
             String str = array.toString().replace("'", "''");
+            String ret;
             if (labelType.equals("VERTEX")) {
-                client.callCypherToLeader(String.format("CALL db.upsertVertexByJson('%s','%s')", labelName, str), graphname, 10000);
+                ret = client.callCypherToLeader(String.format("CALL db.upsertVertexByJson('%s','%s')", labelName, str), graphname, 10000);
             } else {
-                client.callCypherToLeader(String.format("CALL db.upsertEdgeByJson('%s','%s','%s','%s')",
+                ret = client.callCypherToLeader(String.format("CALL db.upsertEdgeByJson('%s','%s','%s','%s')",
                         labelName, startLabelJson, endLabelJson, str), graphname, 10000);
             }
+            Gson gson = new Gson();
+            JsonArray jsonArray = gson.fromJson(ret, JsonArray.class);
+            String result = gson.toJson(jsonArray.get(0).getAsJsonArray());
+            LOG.info(result);
         }
 
         @Override
