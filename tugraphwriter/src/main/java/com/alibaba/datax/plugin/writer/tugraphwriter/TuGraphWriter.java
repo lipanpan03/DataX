@@ -189,10 +189,22 @@ public class TuGraphWriter extends Writer {
                 ret = client.callCypherToLeader(String.format("CALL db.upsertEdgeByJson('%s','%s','%s','%s')",
                         labelName, startLabelJson, endLabelJson, str), graphname, 10000);
             }
-            Gson gson = new Gson();
-            JsonArray jsonArray = gson.fromJson(ret, JsonArray.class);
-            String result = gson.toJson(jsonArray.get(0).getAsJsonObject());
-            LOG.info(result);
+            try {
+                Gson gson = new Gson();
+                JsonArray jsonArray = gson.fromJson(ret, JsonArray.class);
+                JsonObject obj = jsonArray.get(0).getAsJsonObject();
+                int total = obj.get("total").getAsInt();
+                int index_conflict = obj.get("index_conflict").getAsInt();
+                int insert = obj.get("insert").getAsInt();
+                int update = obj.get("update").getAsInt();
+                int data_error = obj.get("data_error").getAsInt();
+                if (data_error > 0 || index_conflict > 0) {
+                    LOG.warn("upsert result: " + gson.toJson(obj));
+                }
+            } catch (Exception e) {
+                LOG.error(e.toString());
+                throw new RuntimeException(ret);
+            }
         }
 
         @Override
