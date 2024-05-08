@@ -1,7 +1,7 @@
 package com.alibaba.datax.plugin.writer.tugraphwriter;
 
 public final class Key {
-    public final static String URLS = "urls";
+    public final static String URL = "url";
     public final static String USERNAME = "username";
     public final static String PASSWORD = "password";
     public final static String GRAPH_NAME = "graphName";
