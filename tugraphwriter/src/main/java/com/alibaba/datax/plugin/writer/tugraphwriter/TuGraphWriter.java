@@ -129,9 +129,8 @@ public class TuGraphWriter extends Writer {
             Map<String, String> allProperties = new HashMap<>();
             {
                 Gson gson = new Gson();
-                JsonArray jsonArray = gson.fromJson(schema, JsonArray.class);
-                JsonObject jsonObject = jsonArray.get(0).getAsJsonObject().get("schema").getAsJsonObject();
-                JsonArray array = jsonObject.get("properties").getAsJsonArray();
+                JsonObject schemaObj = gson.fromJson(schema, JsonObject.class);
+                JsonArray array = schemaObj.get("properties").getAsJsonArray();
                 for (JsonElement element : array) {
                     JsonObject obj = element.getAsJsonObject();
                     String name = obj.get("name").getAsString();
@@ -143,10 +142,9 @@ public class TuGraphWriter extends Writer {
                 String[] vertexSchemas = new String[]{startSchema,endSchema};
                 for (int i = 0; i < vertexSchemas.length; i++) {
                     Gson gson = new Gson();
-                    JsonArray jsonArray = gson.fromJson(vertexSchemas[i], JsonArray.class);
-                    JsonObject jsonObject = jsonArray.get(0).getAsJsonObject().get("schema").getAsJsonObject();
-                    String primary = jsonObject.get("primary").getAsString();
-                    JsonArray properties = jsonObject.get("properties").getAsJsonArray();
+                    JsonObject schemaObj = gson.fromJson(vertexSchemas[i], JsonObject.class);
+                    String primary = schemaObj.get("primary").getAsString();
+                    JsonArray properties = schemaObj.get("properties").getAsJsonArray();
                     for (JsonElement element : properties) {
                         JsonObject obj = element.getAsJsonObject();
                         String name = obj.get("name").getAsString();
@@ -182,8 +180,8 @@ public class TuGraphWriter extends Writer {
                 Value parameters = Values.parameters("label", labelName, "data", array);
                 res = session.run("CALL db.upsertVertex($label,$data)", parameters);
             } else {
-                Value parameters = Values.parameters("label", labelName, "start", startLabel, "end", endLabel, "data", array);
-                res = session.run("CALL db.upsertEdge($label, $start, $end, $data)", parameters);
+                Value parameters = Values.parameters("label", labelName, "startLabel", startLabel, "endLabel", endLabel, "data", array);
+                res = session.run("CALL db.upsertEdge($label,$startLabel,$endLabel,$data)", parameters);
             }
             org.neo4j.driver.Record record = res.single();
             int data_error = record.get("data_error").asInt();
