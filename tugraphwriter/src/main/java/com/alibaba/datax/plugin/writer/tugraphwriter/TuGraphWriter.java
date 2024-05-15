@@ -181,7 +181,7 @@ public class TuGraphWriter extends Writer {
         }
 
         private void writeTugraph(JsonArray array) throws Exception {
-            String str = array.toString().replace("'", "''");
+            String str = array.toString().replace("\\","\\\\").replace("'", "\\'");
             String ret;
             if (labelType.equals("VERTEX")) {
                 ret = client.callCypherToLeader(String.format("CALL db.upsertVertexByJson('%s','%s')", labelName, str), graphname, 10000);
