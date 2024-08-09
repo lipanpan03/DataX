@@ -83,8 +83,8 @@ public class TuGraphReader extends Reader {
 						throw DataXException.asDataXException(TuGraphReaderErrorCode.EXPORT_ERROR, "failed to export:" + value.asString());
 					}
 					record.addColumn(col);
-					recordSender.sendToWriter(record);
 				}
+				recordSender.sendToWriter(record);
 			}
 		}
 
